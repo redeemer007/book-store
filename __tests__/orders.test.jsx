@@ -11,11 +11,6 @@ describe("First Suite", () => {
     //runs after every test block or test case
     afterAll(() => { })
 
-    //test block or test case
-    test("send get response", () => {
-        request(app).get("/bill").expect(200, "done");
-    })
-
     test("post order data", () => {
         request(app).post("/orders").send({
             customerId: "CustomerID_1000",
