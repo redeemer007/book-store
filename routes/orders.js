@@ -32,10 +32,25 @@ orderRouter.put('/orders', async (req, res) => {
       let rentDetails = await RentDetails.findOne({type: req.body.type });
       order.returnedDate = Date.now();
 
-      const duration = Math.round(Math.abs((order.returnedDate - order.issueDate) / (24 * 60 * 60 * 1000)));
+      let duration = Math.round(Math.abs((order.returnedDate - order.issueDate) / (24 * 60 * 60 * 1000)));
 
       //calculating amount
-      order.totalAmount = duration * rentDetails.rentalCharge;
+      if(rentDetails.type == "regular"){        
+        if(duration == 1 || duration == 2){
+          order.totalAmount =  2;
+        }else{
+          duration = duration - 2;
+          order.totalAmount = 2 + (duration * rentDetails.rentalCharge);
+        }
+      }else if(rentDetails.type == "novel"){
+        if(duration < 3){
+          order.totalAmount = 4.5;
+        }else{
+          order.totalAmount = duration * rentDetails.rentalCharge;
+        }
+      }else{
+        order.totalAmount = duration * rentDetails.rentalCharge;
+      }
       order.status = "closed";
       await Order.findOneAndUpdate(filter, order);
     }

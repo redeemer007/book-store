@@ -28,4 +28,14 @@ describe("First Suite", () => {
             ]
         }).expect(200, "order updated!!");
     })
+
+    test("update order data with condition", () => {
+        request(app).put("/orders").send({
+            customerId: "CustomerID_1000",
+            books: [
+                "BookID_1"
+            ],
+            "type" : "novel"            
+        }).expect(200, "order updated!!");
+    })
 })
